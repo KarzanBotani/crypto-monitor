@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
+# Kraken key (API KEY) && secret (API Private Key)
+#key.js
+#secret.js
