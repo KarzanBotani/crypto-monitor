@@ -58,5 +58,6 @@ typings/
 .env
 
 # Kraken key (API KEY) && secret (API Private Key)
-#key.js
-#secret.js
+key.js
+secret.js
+/key.js

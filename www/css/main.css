@@ -1,0 +1,66 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+}
+
+#toggle-rates {
+  font-size: 10px;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.r-style {
+  white-space: nowrap;
+  border-bottom: 1px solid black;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.info-row {
+  font-size: 12px;
+  border-bottom: 1px solid black;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.title {
+  text-transform: uppercase;
+}
+
+.display-btn {
+  text-transform: uppercase;
+}
+
+.hide-div {
+  display: none;
+}
+
+.separator {
+  border: 1px solid orange;
+}
+
+.dropdown a {
+  cursor: pointer;
+  min-width: 200px;
+}
+
+.dropdown-item:active {
+  background-color: pink
+}
+
+.dropdown-item.active {
+  background-color: pink;
+}
+
+.dropdown-item:hover {
+  background-color: orange;
+}
+
+.crypto-dropdown {
+  margin: 0 auto;
+  left: unset;
+}
+
+.convert-input {
+  font-size: 12px;
+}

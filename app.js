@@ -1,35 +1,70 @@
-const express = require('express'),
-      app = express(),
-      key          = require('./key'), // API Key
-      secret       = require('./secret'), // API Private Key
-      KrakenClient = require('@warren-bank/node-kraken-api'),
-      kraken = new KrakenClient(key, secret, {timeout: 10});
+const express               = require('express'),
+      app                   = express(),
+      bodyParser            = require('body-parser'),
+      key                   = require('./key'),
+      secret                = require('./secret'),
+      KrakenClient          = require('@warren-bank/node-kraken-api'),
+      kraken                = new KrakenClient(key, secret, {timeout: 10000});
 
+/* middleware */
+app.use(bodyParser.json());
 
-function ticker() {
+let currentRate = {};
+let highRate = {};
 
-  let currentTime = new Date().toString();
+let fiat = [
+  { name: 'SEK', rate: '9.96' },
+];
 
-  kraken.api('Ticker', { 'pair': 'XBTEUR' }).then((res) => {
-    console.log('XBT / EUR: ', res);
-  });
+app.get('/fiat', (req,res) => {
+  res.send(fiat);
+  res.end();
+});
 
-  kraken.api('Ticker', { 'pair': 'BCHEUR' }).then((res) => {
-    console.log('BCH / EUR: ', res);
-  });
+/* keep */
+app.get('/currentRate', (req,res) => {
+  res.send(currentRate);
+  res.end();
+});
 
-  kraken.api('Ticker', { 'pair': 'ETHEUR' }).then((res) => {
-    console.log('ETH / EUR: ', res);
-  });
+app.get('/highRate', (req,res) => {
+  res.send(highRate);
+  res.end();
+});
 
-  kraken.api('Ticker', { 'pair': 'XMREUR' }).then((res) => {
-    console.log('XMR / EUR: ', res);
+/* get current rates in euro */
+function tickerCurrent(res) {
+  kraken.api('Ticker', { 'pair': 'XBTEUR,BCHEUR,ETHEUR,LTCEUR,XMREUR' }).then((res) => {
+    currentRate['Bitcoin (XBT)'] = res["XXBTZEUR"]["c"].splice(0,1);
+    currentRate['Bitcoin Cash (BCH)'] = res["BCHEUR"]["c"].splice(0,1);
+    currentRate['Ether (ETH)'] = res["XETHZEUR"]["c"].splice(0,1);
+    currentRate['Monero (XMR)'] = res["XXMRZEUR"]["c"].splice(0,1);
+
+    console.log('current rate: ', currentRate);
+  }).catch((err) => {
+    console.log(err);
   });
 }
 
-ticker();
+/* get 24h high rates in euro */
+function tickerHigh(res) {
+  kraken.api('Ticker', { 'pair': 'XBTEUR,BCHEUR,ETHEUR,LTCEUR,XMREUR' }).then((res) => {
+    highRate['Bitcoin (XBT)'] = res["XXBTZEUR"]["h"].splice(1,1);
+    highRate['Bitcoin Cash (BCH)'] = res["BCHEUR"]["h"].splice(1,1);
+    highRate['Ether (ETH)'] = res["XETHZEUR"]["h"].splice(1,1);
+    highRate['Monero (XMR)'] = res["XXMRZEUR"]["h"].splice(1,1);
 
-setInterval(ticker, 1000 * 60 * 30);
+    console.log('24h high rate: ', highRate);
+  }).catch((err) => {
+    console.log(err);
+  });
+}
+
+tickerCurrent();
+setInterval(tickerCurrent, 1000 * 60 * 30);
+
+tickerHigh();
+setInterval(tickerHigh, 1000 * 60 * 30);
 
 app.use(express.static('./www'));
-app.listen('3000', () => console.log('UP AND RUNNING ON PORT 3000!'));
+app.listen(4030, () => console.log('UP AND RUNNING ON PORT 3000!'));
