@@ -4,7 +4,6 @@ let highRate;
 let currentCrypto;
 let lastInput;
 
-
 $(document).ready(() => {
 
   $.ajax({
@@ -44,18 +43,12 @@ $(document).ready(() => {
     $('.high-rates').toggleClass('d-none');
     $('.current-rates').toggleClass('d-none');
 
-    // if ($('.current-t').hasClass('d-none')) {
-    //   $('.currency-list-title').text('showing current rates');
-    // }
-
     if ($('.high-t').hasClass('d-none')) {
       $('.currency-list-title').text('highest rates past 24h');
     } else {
       $('.currency-list-title').text('current rates');
     }
-
   });
-
 });
 
 function renderCurrent () {
@@ -171,6 +164,7 @@ function createDropdown() {
       $(this).addClass('active');
 
       $('.convert-input').prop('disabled', false);
+      $('#crypto-label').text(crypto);
 
       $('.dropdown-toggle').text(crypto);
       select(crypto);

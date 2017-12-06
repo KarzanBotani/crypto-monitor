@@ -67,4 +67,4 @@ tickerHigh();
 setInterval(tickerHigh, 1000 * 60 * 30);
 
 app.use(express.static('./www'));
-app.listen(4030, () => console.log('UP AND RUNNING ON PORT 3000!'));
+app.listen(3010, () => console.log('UP AND RUNNING ON PORT 3010!'));
