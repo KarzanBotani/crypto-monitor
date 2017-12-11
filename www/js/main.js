@@ -6,11 +6,32 @@ let lastInput;
 
 $(document).ready(() => {
 
+  getRates();
+
+  setInterval(getRates, 10000);
+
+  $('#toggle-rates').on('click', function() {
+    $('.high-t').toggleClass('d-none');
+    $('.current-t').toggleClass('d-none');
+    $('.high-rates').toggleClass('d-none');
+    $('.current-rates').toggleClass('d-none');
+
+    if ($('.high-t').hasClass('d-none')) {
+      $('.currency-list-title').text('highest rates past 24h');
+    } else {
+      $('.currency-list-title').text('current rates');
+    }
+  });
+
+});
+
+function getRates() {
+
   $.ajax({
     url: '/fiat',
     cache: false,
     method: 'get',
-    success: (data)=>{
+    success: (data) => {
 
       fiat = data;
 
@@ -34,25 +55,15 @@ $(document).ready(() => {
           renderHigh();
         }
       });
+
     }
   });
-
-  $('#toggle-rates').on('click', function() {
-    $('.high-t').toggleClass('d-none');
-    $('.current-t').toggleClass('d-none');
-    $('.high-rates').toggleClass('d-none');
-    $('.current-rates').toggleClass('d-none');
-
-    if ($('.high-t').hasClass('d-none')) {
-      $('.currency-list-title').text('highest rates past 24h');
-    } else {
-      $('.currency-list-title').text('current rates');
-    }
-  });
-});
+}
 
 function renderCurrent () {
   let sekNumber = fiat[0].rate * 1;
+
+  $('#append-current').empty();
 
   for (let key in currentRate) {
     let value = currentRate[key][0] * 1;
@@ -76,12 +87,14 @@ function renderCurrent () {
     row.append(sek);
     row.append(eur);
 
-    $('.currency-list').append(row);
+    $('#append-current').append(row);
   }
 }
 
 function renderHigh() {
   let sekNumber = fiat[0].rate * 1;
+
+  $('#append-high').empty();
 
   for (let key in highRate) {
     let value = highRate[key][0] * 1;
@@ -105,7 +118,7 @@ function renderHigh() {
     row.append(sek);
     row.append(eur);
 
-    $('.currency-list').append(row);
+    $('#append-high').append(row);
   }
 }
 
@@ -154,6 +167,14 @@ function select(crypto) {
 }
 
 function createDropdown() {
+
+  $('.crypto-dropdown').empty();
+
+  if (lastInput) {
+    $(lastInput).trigger('keyup');
+  } else if (currentCrypto) {
+    $('#crypto-input').trigger('keyup');
+  }
 
   for (let crypto in currentRate) {
     let listItem = $('<a class="dropdown-item">');

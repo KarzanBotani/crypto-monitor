@@ -1,13 +1,19 @@
 const express               = require('express'),
       app                   = express(),
       bodyParser            = require('body-parser'),
+      cookieParser          = require('cookie-parser'),
+      Cookiesession         = require('./classes/cookie-session.class'),
       key                   = require('./key'),
       secret                = require('./secret'),
       KrakenClient          = require('@warren-bank/node-kraken-api'),
       kraken                = new KrakenClient(key, secret, {timeout: 10000});
 
+const cookieSession = new Cookiesession();
+
 /* middleware */
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(new Cookiesession().middleware());
 
 let currentRate = {};
 let highRate = {};
@@ -61,10 +67,10 @@ function tickerHigh(res) {
 }
 
 tickerCurrent();
-setInterval(tickerCurrent, 10000);
+setInterval(tickerCurrent, 3000);
 
 tickerHigh();
-setInterval(tickerHigh, 10000);
+setInterval(tickerHigh, 3000);
 
 app.use(express.static(__dirname + '/www', {extensions:['html']} ));
 app.listen(3010, () => console.log('UP AND RUNNING ON PORT 3010!'));
