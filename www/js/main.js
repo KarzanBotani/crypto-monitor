@@ -5,9 +5,7 @@ let fiat,
     lastInput;
 
 $(document).ready(() => {
-
   getRates();
-
   setInterval(getRates, 10000);
 
   $('#toggle-rates').on('click', function() {
@@ -58,6 +56,7 @@ function getRates() {
 
     }
   });
+
 }
 
 function renderCurrent () {
@@ -93,7 +92,6 @@ function renderCurrent () {
 
 function renderHigh() {
   let sekNumber = fiat.rates.SEK;
-  console.log(sekNumber);
 
   $('#append-high').empty();
 
