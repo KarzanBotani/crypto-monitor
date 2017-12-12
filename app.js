@@ -18,15 +18,6 @@ app.use(new Cookiesession().middleware());
 let currentRate = {};
 let highRate = {};
 
-let fiat = [
-  { name: 'SEK', rate: '9.96' },
-];
-
-app.get('/fiat', (req,res) => {
-  res.send(fiat);
-  res.end();
-});
-
 /* keep */
 app.get('/currentRate', (req,res) => {
   res.send(currentRate);

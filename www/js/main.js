@@ -1,8 +1,8 @@
-let fiat;
-let currentRate;
-let highRate;
-let currentCrypto;
-let lastInput;
+let fiat,
+    currentRate,
+    highRate,
+    currentCrypto,
+    lastInput;
 
 $(document).ready(() => {
 
@@ -28,12 +28,12 @@ $(document).ready(() => {
 function getRates() {
 
   $.ajax({
-    url: '/fiat',
-    cache: false,
+    url: 'https://api.fixer.io/latest?base=EUR',
+    cache: true,
     method: 'get',
-    success: (data) => {
+    success: (fixerResult) => {
 
-      fiat = data;
+      fiat = fixerResult;
 
       $.ajax({
         url: '/currentRate',
@@ -61,7 +61,7 @@ function getRates() {
 }
 
 function renderCurrent () {
-  let sekNumber = fiat[0].rate * 1;
+  let sekNumber = fiat.rates.SEK;
 
   $('#append-current').empty();
 
@@ -92,7 +92,8 @@ function renderCurrent () {
 }
 
 function renderHigh() {
-  let sekNumber = fiat[0].rate * 1;
+  let sekNumber = fiat.rates.SEK;
+  console.log(sekNumber);
 
   $('#append-high').empty();
 
@@ -126,7 +127,7 @@ function select(crypto) {
   currentCrypto = crypto;
 
   let euro = Number(currentRate[currentCrypto][0]);
-  let sekPerEuro = Number(fiat[0].rate);
+  let sekPerEuro = Number(fiat.rates.SEK);
   let sek = sekPerEuro * euro;
 
   if (lastInput == '#crypto-input') {
@@ -200,7 +201,7 @@ function createDropdown() {
 
   $('#crypto-input').on('keyup', function() {
     let euro = Number(currentRate[currentCrypto][0]);
-    let sekPerEuro = Number(fiat[0].rate);
+    let sekPerEuro = Number(fiat.rates.SEK);
     let sek = sekPerEuro * euro;
 
     let numberOfCoins = Number($(this).val().replace(/\,/g, '.').replace(/[^\d.]/g, '')); // event.target = this.
@@ -214,7 +215,7 @@ function createDropdown() {
 
   $('#eur-input').on('keyup', function() {
     let euro = Number(currentRate[currentCrypto][0]);
-    let sekPerEuro = Number(fiat[0].rate);
+    let sekPerEuro = Number(fiat.rates.SEK);
 
     let numberOfEuro = Number($(this).val().replace(/\,/g, '.').replace(/[^\d.]/g, '')); // event.target = this.
 
@@ -228,7 +229,7 @@ function createDropdown() {
 
   $('#sek-input').on('keyup', function() {
     let euro = Number(currentRate[currentCrypto][0]);
-    let sekPerEuro = Number(fiat[0].rate);
+    let sekPerEuro = Number(fiat.rates.SEK);
 
     let numberOfSek = Number($(this).val().replace(/\,/g, '.').replace(/[^\d.]/g, '')); // event.target = this.
 
