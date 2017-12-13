@@ -20,18 +20,16 @@ $(document).ready(() => {
       $('.currency-list-title').text('current rates');
     }
   });
-
 });
 
 function getRates() {
-
   $.ajax({
     url: 'https://api.fixer.io/latest?base=EUR',
     cache: true,
     method: 'get',
-    success: (fixerResult) => {
+    success: (fixerData) => {
 
-      fiat = fixerResult;
+      fiat = fixerData;
 
       $.ajax({
         url: '/currentRate',
@@ -55,8 +53,8 @@ function getRates() {
       });
 
     }
-  });
 
+  });
 }
 
 function renderCurrent () {
