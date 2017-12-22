@@ -77,9 +77,7 @@ function allKrakenCurrencies(res) {
     allKraken['Zcash (ZEC)'] = res["XZECZEUR"];
 
     allKraken = Object.keys(allKraken);
-  }).catch((err) => {
-    allKrakenCurrencies();
-  });
+  }).catch((err) => { });
 }
 
 /* get current rates in euro */
@@ -95,9 +93,7 @@ function tickerCurrent(res) {
     currentRate['Litecoin (LTC)'] = res["XLTCZEUR"]["c"].splice(0,1);
     currentRate['Ripple (XPR)'] = res["XXRPZEUR"]["c"].splice(0,1);
     currentRate['Zcash (ZEC)'] = res["XZECZEUR"]["c"].splice(0,1);
-  }).catch((err) => {
-    // console.log(err);
-  });
+  }).catch((err) => { });
 }
 
 /* get 24h high rates in euro */
@@ -113,9 +109,7 @@ function tickerHigh(res) {
     highRate['Litecoin (LTC)'] = res["XLTCZEUR"]["h"].splice(1,1);
     highRate['Ripple (XPR)'] = res["XXRPZEUR"]["h"].splice(1,1);
     highRate['Zcash (ZEC)'] = res["XZECZEUR"]["h"].splice(1,1);
-  }).catch((err) => {
-    // console.log(err);
-  });
+  }).catch((err) => { });
 }
 
 allKrakenCurrencies();
