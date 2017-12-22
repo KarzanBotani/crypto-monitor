@@ -18,6 +18,8 @@ app.use(new Cookiesession().middleware());
 let usersCurrencies = {
   'default': [
     'Bitcoin (XBT)',
+    'Bitcoin Cash (BCH)',
+    'Ether (ETH)',
     'Monero (XMR)'
   ]
 };
