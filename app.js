@@ -78,7 +78,7 @@ function allKrakenCurrencies(res) {
 
     allKraken = Object.keys(allKraken);
   }).catch((err) => {
-    // console.log(err);
+    allKrakenCurrencies();
   });
 }
 
@@ -119,7 +119,6 @@ function tickerHigh(res) {
 }
 
 allKrakenCurrencies();
-setInterval(tickerCurrent, 1000);
 
 tickerCurrent();
 setInterval(tickerCurrent, 3000);
