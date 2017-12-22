@@ -9,6 +9,7 @@
         <link href="https://fonts.googleapis.com/css?family=Trocchi" rel="stylesheet">
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/css/font-awesome/web-fonts-with-css/css/fontawesome-all.css">
 
         <script src="/js/jquery.min.js"></script>
         <script src="/js/tether.min.js"></script>
@@ -30,6 +31,25 @@
                   <span class="high-t display-btn">Display 24h High</span>
                   <span class="d-none current-t display-btn">Display Current</span>
                 </button>
+              </div>
+
+              <div class="col mt-2 text-right settings">
+                <span class="fas fa-cog settings-button"></span>
+              </div>
+
+              <div class="col-12 separator settings-list-separator d-none mt-2"></div>
+
+              <div class="col-12 settings-list d-none">
+
+                <ul class="settings-list-buttons d-none">
+                  <li class="no-gutters r-style settings-list-update">UPDATE SUBSCRIBED CURRENCIES</li>
+                </ul>
+
+                <ul class="settings-currency-list d-none">
+                  <li class="settings-currencies"></li>
+
+                  <button type="button" class="btn btn-success btn-sm" id="update-button">UPDATE</button>
+                </ul>
               </div>
 
               <div class="col-12 separator mt-2"></div>

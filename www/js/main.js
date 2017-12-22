@@ -1,12 +1,22 @@
-let fiat,
+let krakenCurrencies,
+    fiat,
     currentRate,
     highRate,
+    addCurrencyProperty,
     currentCrypto,
     lastInput;
 
 $(document).ready(() => {
-  getRates();
-  setInterval(getRates, 10000);
+  addCurrencyProperty = JSON.parse(localStorage.getItem('currencies'));
+
+  if (addCurrencyProperty) {
+    addCurrency();
+  } else {
+    getRates();
+  }
+
+  getKrakenCurrencies();
+  // setInterval(getRates, 1000);
 
   $('#toggle-rates').on('click', function() {
     $('.high-t').toggleClass('d-none');
@@ -19,8 +29,21 @@ $(document).ready(() => {
     } else {
       $('.currency-list-title').text('current rates');
     }
+
   });
 });
+
+function getKrakenCurrencies() {
+  $.ajax({
+    url: '/allKrakenCurrencies',
+    cache: false,
+    method: 'get',
+    success: (data) => {
+      krakenCurrencies = data;
+      settings();
+    }
+  });
+}
 
 function getRates() {
   $.ajax({
@@ -51,13 +74,93 @@ function getRates() {
           renderHigh();
         }
       });
-
     }
-
   });
 }
 
-function renderCurrent () {
+function post(url, properties, callback) {
+  $.ajax({
+    url: url,
+    type: 'post',
+    beforeSend: function(xhr) {
+      // Fix a bug (console error) in some versions of firefox
+      if (xhr.overrideMimeType) {
+        xhr.overrideMimeType('application/json');
+      }
+    },
+    dataType: 'json',
+    processData: false,
+    headers: {'Content-Type': 'application/json'},
+    data: JSON.stringify(properties),
+    // callback functions
+    success: callback,
+    error: function(error){
+      callback({_error:error.responseJSON});
+    }
+  });
+}
+
+function addCurrency() {
+  post('/currentRate', { add: addCurrencyProperty }, (data) => {
+    console.log(data);
+    localStorage.setItem('currencies',  JSON.stringify(addCurrencyProperty));
+    getRates();
+  });
+}
+
+function settings() {
+  $('.settings-button').hover(function() {
+    $(this).addClass('cursor');
+  });
+
+  $('.settings-button').on('click', function() {
+    $('.settings-list-separator').toggleClass('d-none');
+    $('.settings-list').toggleClass('d-none');
+    $('.settings-list-buttons').toggleClass('d-none');
+    $('.settings-currency-list').addClass('d-none');
+  });
+
+  $('.settings-list-update').on('click', function() {
+    $('.settings-currency-list').toggleClass('d-none');
+    $('.settings-currencies').empty();
+
+    for (let name of krakenCurrencies) {
+      let listItem = $('<li class="no-gutters r-style">');
+      if(addCurrencyProperty.includes(name)) {
+        listItem.toggleClass('active');
+      }
+      listItem.text(name);
+
+      listItem.hover(function() {
+        listItem.addClass('cursor');
+      });
+
+      listItem.on('click', function() {
+        let selectedCurrencies = [];
+        listItem.toggleClass('active');
+        let a = $('.settings-currencies li.active');
+
+        a.each(function(index, value) {
+          selectedCurrencies.push($(value).text());
+        });
+
+        addCurrencyProperty = selectedCurrencies;
+      });
+
+      $('.settings-currencies').append(listItem);
+    }
+  });
+
+  $('#update-button').on('click', function() {
+    addCurrency();
+    $('.settings-list-separator').toggleClass('d-none');
+    $('.settings-list').toggleClass('d-none');
+    $('.settings-list-buttons').toggleClass('d-none');
+    $('.settings-currency-list').toggleClass('d-none');
+  });
+}
+
+function renderCurrent() {
   let sekNumber = fiat.rates.SEK;
 
   $('#append-current').empty();
@@ -127,7 +230,7 @@ function select(crypto) {
   let sek = sekPerEuro * euro;
 
   if (lastInput == '#crypto-input') {
-    let numberOfCoins = Number($(lastInput).val().replace(/\,/g, '.').replace(/[^\d.]/g, '')); // event.target = this.
+    let numberOfCoins = Number($(lastInput).val().replace(/\,/g, '.').replace(/[^\d.]/g, ''));
     let euroVal = Number((euro * numberOfCoins).toFixed(2));
     let sekVal = Number((sek * numberOfCoins).toFixed(2));
 
@@ -136,7 +239,7 @@ function select(crypto) {
   }
 
   else if (lastInput == '#eur-input') {
-    let numberOfEuro = Number($(lastInput).val().replace(/\,/g, '.').replace(/[^\d.]/g, '')); // event.target = this.
+    let numberOfEuro = Number($(lastInput).val().replace(/\,/g, '.').replace(/[^\d.]/g, ''));
     let cryptoVal = numberOfEuro / euro;
     let sekVal = numberOfEuro * sekPerEuro;
     sekVal = Number(sekVal.toFixed(2));
@@ -146,7 +249,7 @@ function select(crypto) {
   }
 
   else if (lastInput == '#sek-input') {
-    let numberOfSek = Number($(lastInput).val().replace(/\,/g, '.').replace(/[^\d.]/g, '')); // event.target = this.
+    let numberOfSek = Number($(lastInput).val().replace(/\,/g, '.').replace(/[^\d.]/g, ''));
     let cryptoVal = (numberOfSek / sekPerEuro) / euro;
     let euroVal = numberOfSek / sekPerEuro;
     euroVal = Number(euroVal.toFixed(2));
@@ -164,7 +267,6 @@ function select(crypto) {
 }
 
 function createDropdown() {
-
   $('.crypto-dropdown').empty();
 
   if (lastInput) {
@@ -238,34 +340,3 @@ function createDropdown() {
   });
 
 }
-
-
-
-
-// create(properties,callback){
-
-//   $.ajax({
-//     url: this.baseUrl,
-//     type: "POST",
-//     beforeSend: function(xhr) {
-//       // Fix a bug( console error) in some versions of firefox
-//       if (xhr.overrideMimeType)
-//         xhr.overrideMimeType("application/json");
-//     },
-//     dataType: "json",
-//     // don't process the request body
-//     processData: false,
-//     // and tell Node that it is raw json
-//     headers: {"Content-Type": "application/json"},
-//     // the request body
-//     data: JSON.stringify(properties),
-//     // callback functions
-//     success: callback,
-//     error: function(error){
-//       callback({_error:error.responseJSON});
-//     }
-//   });
-
-// }
-
-let currentTime = new Date().toString();

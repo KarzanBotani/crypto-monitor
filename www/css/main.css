@@ -68,3 +68,21 @@ body {
 .input-label {
   font-size: 10px;
 }
+
+.cursor {
+  cursor: pointer;
+}
+
+.active {
+  background-color: pink;
+}
+
+.settings-currency-list {
+  list-style: none;
+  padding: 0;
+}
+
+.settings-list-buttons {
+  list-style: none;
+  padding: 0;
+}
