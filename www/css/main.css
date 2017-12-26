@@ -1,6 +1,6 @@
 body {
   font-family: 'Roboto', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 #toggle-rates {
@@ -17,9 +17,8 @@ body {
 }
 
 .info-row {
-  font-size: 12px;
+  font-size: 9px;
   border-bottom: 1px solid black;
-  font-style: italic;
   font-weight: bold;
 }
 
@@ -85,4 +84,19 @@ body {
 .settings-list-buttons {
   list-style: none;
   padding: 0;
+}
+
+.rank-div {
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.name-div {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.value-div {
+  font-size: 13px;
 }
