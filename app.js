@@ -27,7 +27,7 @@ app.use(Rest.start({
     host: '127.0.0.1',
     user: 'root',
     password: devPassword.unique(),
-    database: 'crypto-monitor',
+    database: 'crypto_monitor',
     multipleStatements: true
   },
   baseUrl: '/rest',
