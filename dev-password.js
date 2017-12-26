@@ -4,4 +4,4 @@ function unique() {
 
 module.exports = {
   unique: unique
-}1
+}
