@@ -24,8 +24,11 @@
                 <div class="col-12">
                     <div class="row">
 
-                        <div class="col-9"></div>
-                        <div class="col-2">
+                        <div class="col-2"></div>
+                        <div class="col-8 mt-2">
+                            <a href="/"><h5 class="home-button text-center title cursor">HOME</h5></a>
+                        </div>
+                        <div class="col-2 mt-2">
                             <span class="login-button cursor">LOGIN</span>
                             <span class="logout-button cursor d-none">LOGOUT</span>
                         </div>
@@ -33,13 +36,26 @@
                         <div class="col-12 separator mt-2"></div>
 
                         <div class="col-12 mt-4 d-none" id="login-div">
-                            <h5 class="text-center title">LOGIN!</h5>
+                            <h5 class="text-center title">LOGIN</h5>
+                            <p class="text-center title d-none" id="wrong-login">Incorrect email and/or password</p>
 
                             <div class="offset-1 col-10">
-                                <input placeholder="EMAIL" class="login-input" id="email-input">
-                                <input placeholder="PASSWORD" class="login-input" id="password-input">
+                                <input placeholder="EMAIL" class="login-input" id="email-login">
+                                <input placeholder="PASSWORD" class="login-input" id="password-login">
                                 <button type="button" class="btn btn-success login-submit">LOGIN</button>
-                                <p class="mt-1">Don't have an account yet? <a href="#">Sign up!</a></p>
+                                <p class="mt-1">Don't have an account yet? <a href="#" class="signup-button">Sign up!</a></p>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4 d-none" id="signup-div">
+                            <h5 class="text-center title">REGISTRATION</h5>
+                            <p class="text-center title d-none" id="email-exists">The email is already in use.</p>
+
+                            <div class="offset-1 col-10">
+                                <input placeholder="EMAIL" class="login-input" id="email-register">
+                                <input placeholder="PASSWORD" class="login-input" id="password-register">
+                                <button type="button" class="btn btn-success signup-submit">COMPLETE</button>
+                                <p class="mt-1">Already have an account? <a href="#" class="go-login-button">Login!</a></p>
                             </div>
                         </div>
 

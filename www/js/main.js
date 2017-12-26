@@ -5,6 +5,7 @@ $(document).ready(() => {
   setInterval(getInfo, 1000 * 60);
 
   login();
+  register();
 });
 
 function getInfo() {
@@ -102,12 +103,19 @@ function renderAll() {
 
 function login() {
   $('.login-button').on('click', function() {
-    $('#main-div').toggleClass('d-none');
-    $('#login-div').toggleClass('d-none');
+    if ($('#signup-div').hasClass('d-none')) {
+      $('#main-div').toggleClass('d-none');
+      $('#login-div').toggleClass('d-none');
+    }
+
+    else if (!$('#signup-div').hasClass('d-none')) {
+      $('#signup-div').toggleClass('d-none');
+      $('#login-div').toggleClass('d-none');
+    }
   });
 
-  let emailInput = $('#email-input').val();
-  let passwordInput = $('#password-input').val();
+  let emailInput = $('#email-login').val();
+  let passwordInput = $('#password-login').val();
 
   get('/rest/login', (data) => {
     if (data.user) {
@@ -130,6 +138,37 @@ function login() {
         $('.login-button').toggleClass('d-none');
         $('.logout-button').toggleClass('d-none');
         $('#login-div').toggleClass('d-none');
+        $('#main-div').toggleClass('d-none');
+      } else {
+        $('#wrong-login').toggleClass('d-none');
+      }
+    });
+  });
+}
+
+function register() {
+  $('.signup-button').on('click', function() {
+    $('#login-div').toggleClass('d-none');
+    $('#signup-div').toggleClass('d-none');
+  });
+
+  $('.go-login-button').on('click', function() {
+    $('#login-div').toggleClass('d-none');
+    $('#signup-div').toggleClass('d-none');
+  });
+
+  let emailInput = $('#email-register').val();
+  let passwordInput = $('#password-register').val();
+
+  $('.signup-submit').on('click', function() {
+    post('/rest/users', { email: emailInput, "password": passwordInput }, (data) => {
+      if (!data.user) {
+        $('#email-exists').toggleClass('d-none');
+      } else {
+        console.log(data);
+        $('.login-button').toggleClass('d-none');
+        $('.logout-button').toggleClass('d-none');
+        $('#signup-div').toggleClass('d-none');
         $('#main-div').toggleClass('d-none');
       }
     });
