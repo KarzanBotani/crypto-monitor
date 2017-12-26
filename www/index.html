@@ -24,9 +24,26 @@
                 <div class="col-12">
                     <div class="row">
 
+                        <div class="col-9"></div>
+                        <div class="col-2">
+                            <span class="login-button cursor">LOGIN</span>
+                            <span class="logout-button cursor d-none">LOGOUT</span>
+                        </div>
+
                         <div class="col-12 separator mt-2"></div>
 
-                        <div class="col-12 mt-4">
+                        <div class="col-12 mt-4 d-none" id="login-div">
+                            <h5 class="text-center title">LOGIN!</h5>
+
+                            <div class="offset-1 col-10">
+                                <input placeholder="EMAIL" class="login-input" id="email-input">
+                                <input placeholder="PASSWORD" class="login-input" id="password-input">
+                                <button type="button" class="btn btn-success login-submit">LOGIN</button>
+                                <p class="mt-1">Don't have an account yet? <a href="#">Sign up!</a></p>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4" id="main-div">
                             <h5 class="text-center title">showing top 100</h5>
 
                             <div class="row mt-3 no-gutters info-row">

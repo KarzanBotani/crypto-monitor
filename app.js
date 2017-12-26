@@ -54,5 +54,7 @@ function getEverything() {
 getEverything();
 setInterval(getEverything, 3000);
 
+global.dbQuery = Rest.query;
+
 app.use(express.static(__dirname + '/www', {extensions:['html']}));
 app.listen(3010, () => console.log('UP AND RUNNING ON PORT 3010!'));

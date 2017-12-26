@@ -45,7 +45,8 @@ module.exports = class Cookiesession {
   getSession(cookieVal) {
     if (!this.sessionMem[cookieVal]) {
       let session = {
-        cookieVal: cookieVal
+        cookieVal: cookieVal,
+        user: false
       };
 
       this.sessionMem[cookieVal] = session;

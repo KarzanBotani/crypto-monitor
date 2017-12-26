@@ -3,18 +3,34 @@ let cryptoInfo;
 $(document).ready(() => {
   getInfo();
   setInterval(getInfo, 1000 * 60);
+
+  login();
 });
 
 function getInfo() {
+  get('/allInfo', (data) => {
+    cryptoInfo = data;
+    renderAll();
+  });
+}
+
+function get(url, callback) {
   $.ajax({
-    url: '/allInfo',
+    url: url,
+    type: 'get',
     cache: false,
-    method: 'get',
-    success: (res)=>{
-      cryptoInfo = res;
-      console.log(cryptoInfo);
-      renderAll();
-    }
+    processData: false,
+    success: callback
+  });
+}
+
+function del(url, callback) {
+  $.ajax({
+    url: url,
+    type: 'delete',
+    cache: false,
+    processData: false,
+    success: callback
   });
 }
 
@@ -34,7 +50,7 @@ function post(url, properties, callback) {
     data: JSON.stringify(properties),
     // callback functions
     success: callback,
-    error: function(error){
+    error: function(error) {
       callback({_error:error.responseJSON});
     }
   });
@@ -82,4 +98,40 @@ function renderAll() {
 
     $('#append-all').append(row);
   }
+}
+
+function login() {
+  $('.login-button').on('click', function() {
+    $('#main-div').toggleClass('d-none');
+    $('#login-div').toggleClass('d-none');
+  });
+
+  let emailInput = $('#email-input').val();
+  let passwordInput = $('#password-input').val();
+
+  get('/rest/login', (data) => {
+    if (data.user) {
+      $('.login-button').toggleClass('d-none');
+      $('.logout-button').toggleClass('d-none');
+    }
+  });
+
+  $('.logout-button').on('click', function() {
+    del('/rest/login', (data) => {
+      $('.login-button').toggleClass('d-none');
+      $('.logout-button').toggleClass('d-none');
+    });
+  })
+
+  $('.login-submit').on('click', function() {
+    post('/rest/login', { "email": emailInput, "password": passwordInput }, (data) => {
+      // console.log(data);
+      if (data.user) {
+        $('.login-button').toggleClass('d-none');
+        $('.logout-button').toggleClass('d-none');
+        $('#login-div').toggleClass('d-none');
+        $('#main-div').toggleClass('d-none');
+      }
+    });
+  });
 }
