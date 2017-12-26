@@ -139,8 +139,6 @@ function login() {
         $('.logout-button').toggleClass('d-none');
         $('#login-div').toggleClass('d-none');
         $('#main-div').toggleClass('d-none');
-      } else {
-        $('#wrong-login').toggleClass('d-none');
       }
     });
   });
@@ -162,15 +160,11 @@ function register() {
 
   $('.signup-submit').on('click', function() {
     post('/rest/users', { email: emailInput, "password": passwordInput }, (data) => {
-      if (!data.user) {
-        $('#email-exists').toggleClass('d-none');
-      } else {
-        console.log(data);
-        $('.login-button').toggleClass('d-none');
-        $('.logout-button').toggleClass('d-none');
-        $('#signup-div').toggleClass('d-none');
-        $('#main-div').toggleClass('d-none');
-      }
+      // console.log(data);
+      $('.login-button').toggleClass('d-none');
+      $('.logout-button').toggleClass('d-none');
+      $('#signup-div').toggleClass('d-none');
+      $('#main-div').toggleClass('d-none');
     });
   });
 }
