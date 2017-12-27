@@ -2,10 +2,10 @@ let cryptoInfo;
 
 $(document).ready(() => {
   getInfo();
-  setInterval(getInfo, 1000 * 60);
 
   login();
   register();
+  setInterval(getInfo, 1000 * 60);
 });
 
 function getInfo() {
@@ -81,7 +81,8 @@ function renderAll() {
     let dollarValueDiv = $('<div class="col-4 col-sm-2 col-md-2 text-right value-div">');
     let marketCapDiv = $('<div class="col-2 col-sm-3 col-md-3 hidden-sm-down text-right market-div">');
     let availableSupplyDiv = $('<div class="col-2 col-md-2 hidden-md-down text-right supply-div">');
-    let percentChangeDiv = $('<div class="col-2 col-sm-2 col-md-2 text-right percent-div">');
+
+    let percentChangeDiv = $('<div class="col-3 col-sm-2 col-md-2 text-right percent-div">');
 
     rankDiv.text(rank);
     nameDiv.text(name);
@@ -95,7 +96,12 @@ function renderAll() {
     row.append(dollarValueDiv);
     row.append(marketCapDiv);
     row.append(availableSupplyDiv);
-    row.append(percentChangeDiv);
+
+    if (percentChange.charAt(0) == '-') {
+      row.append(percentChangeDiv.css("color", "red"));
+    } else {
+      row.append(percentChangeDiv.css("color", "green"));
+    }
 
     $('#append-all').append(row);
   }
@@ -114,32 +120,30 @@ function login() {
     }
   });
 
-  let emailInput = $('#email-login').val();
-  let passwordInput = $('#password-login').val();
+  let loginEmail = $('#email-login').val();
+  let loginPassword = $('#password-login').val();
 
-  get('/rest/login', (data) => {
-    if (data.user) {
-      $('.login-button').toggleClass('d-none');
-      $('.logout-button').toggleClass('d-none');
-    }
+  get('/login', (data) => {
+    console.log(data);
+    $('.login-button').toggleClass('d-none');
+    $('.logout-button').toggleClass('d-none');
   });
 
   $('.logout-button').on('click', function() {
-    del('/rest/login', (data) => {
+    del('/login', (data) => {
+      console.log(data);
       $('.login-button').toggleClass('d-none');
       $('.logout-button').toggleClass('d-none');
     });
   })
 
   $('.login-submit').on('click', function() {
-    post('/rest/login', { "email": emailInput, "password": passwordInput }, (data) => {
-      // console.log(data);
-      if (data.user) {
-        $('.login-button').toggleClass('d-none');
-        $('.logout-button').toggleClass('d-none');
-        $('#login-div').toggleClass('d-none');
-        $('#main-div').toggleClass('d-none');
-      }
+    post('/login', { "email": loginEmail, "password": loginPassword }, (data) => {
+      console.log('login', data);
+      $('.login-button').toggleClass('d-none');
+      $('.logout-button').toggleClass('d-none');
+      $('#login-div').toggleClass('d-none');
+      $('#main-div').toggleClass('d-none');
     });
   });
 }
@@ -155,12 +159,13 @@ function register() {
     $('#signup-div').toggleClass('d-none');
   });
 
-  let emailInput = $('#email-register').val();
-  let passwordInput = $('#password-register').val();
+  let signupEmail = $('#email-signup').val();
+  let signupPassword = $('#password-signup').val();
 
   $('.signup-submit').on('click', function() {
-    post('/rest/users', { email: emailInput, "password": passwordInput }, (data) => {
-      // console.log(data);
+    post('/rest/users', { "email": signupEmail, "password": signupPassword }, (data) => {
+      console.log('signup', data);
+      console.log('emailInput', signupEmail);
       $('.login-button').toggleClass('d-none');
       $('.logout-button').toggleClass('d-none');
       $('#signup-div').toggleClass('d-none');
