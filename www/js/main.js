@@ -5,6 +5,7 @@ $(document).ready(() => {
 
   login();
   register();
+  portfolio();
   setInterval(getInfo, 1000 * 60);
 });
 
@@ -89,7 +90,7 @@ function renderAll() {
     dollarValueDiv.text('$' + dollarValue);
     marketCapDiv.text('$' + marketCap);
     availableSupplyDiv.text('$' + availableSupply);
-    percentChangeDiv.text(percentChange);
+    percentChangeDiv.text(percentChange + '%');
 
     row.append(rankDiv);
     row.append(nameDiv);
@@ -123,10 +124,8 @@ function login() {
   });
 
   get('/rest/login', (data) => {
-    console.log(data);
-
     if (!data.user) {
-      console.log(data);
+      // console.log(data);
     }
 
     else {
@@ -142,6 +141,12 @@ function login() {
 
     $('.login-button').toggleClass('d-none');
     $('.logout-button').toggleClass('d-none');
+    $('.portfolio-button').toggleClass('d-none');
+
+    if ($('#portfolio-div').hasClass('d-none')) {
+      console.log('hey');
+    }
+
   });
 
   let loginEmail = $('#email-login').val();
@@ -160,22 +165,18 @@ function login() {
     post('/rest/login', { "email": loginEmail, "password": loginPassword }, (data) => {
 
       if (!data.user) {
-        console.log('error: ', data);
         $('#wrong-login').toggleClass('d-none');
       } else {
-        console.log('signup callback: ', data);
-        console.log('loginEmail', loginEmail);
-        console.log('loginPassword', loginPassword);
         $('.login-button').toggleClass('d-none');
         $('.logout-button').toggleClass('d-none');
         $('#login-div').toggleClass('d-none');
         $('#main-div').toggleClass('d-none');
+        $('.portfolio-button').toggleClass('d-none');
         $('#email-login').val('');
         $('#password-login').val('');
       }
+
     });
-
-
   });
 }
 
@@ -206,22 +207,28 @@ function register() {
     post('/rest/users', { "email": signupEmail, "password": signupPassword }, (data) => {
 
       if (data._error) {
-        console.log('error: ', data._error);
         $('#email-exists').toggleClass('d-none');
       }
 
       else {
-        console.log('signup callback: ', data);
-        console.log('signupEmail', signupEmail);
-        console.log('signupPassword', signupPassword);
         $('.login-button').toggleClass('d-none');
         $('.logout-button').toggleClass('d-none');
         $('#signup-div').toggleClass('d-none');
         $('#main-div').toggleClass('d-none');
+        $('.portfolio-button').toggleClass('d-none');
         $('#email-signup').val('');
         $('#password-signup').val('');
       }
 
     });
   });
+}
+
+function portfolio() {
+
+  $('.portfolio-button').on('click', function() {
+    $('#main-div').toggleClass('d-none');
+    $('#portfolio-div').toggleClass('d-none');
+  });
+
 }
