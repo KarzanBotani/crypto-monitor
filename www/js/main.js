@@ -124,8 +124,15 @@ function login() {
 
   get('/rest/login', (data) => {
     console.log(data);
-    $('.login-button').toggleClass('d-none');
-    $('.logout-button').toggleClass('d-none');
+
+    if (!data.user) {
+      console.log(data);
+    }
+
+    else {
+      $('.login-button').toggleClass('d-none');
+      $('.logout-button').toggleClass('d-none');
+    }
   });
 
   $('.logout-button').on('click', function() {
