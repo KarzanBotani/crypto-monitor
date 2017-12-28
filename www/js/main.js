@@ -109,6 +109,7 @@ function renderAll() {
 
 function login() {
   $('.login-button').on('click', function() {
+
     if ($('#signup-div').hasClass('d-none')) {
       $('#main-div').toggleClass('d-none');
       $('#login-div').toggleClass('d-none');
@@ -118,33 +119,56 @@ function login() {
       $('#signup-div').toggleClass('d-none');
       $('#login-div').toggleClass('d-none');
     }
+
   });
 
-  let loginEmail = $('#email-login').val();
-  let loginPassword = $('#password-login').val();
-
-  get('/login', (data) => {
+  get('/rest/login', (data) => {
     console.log(data);
     $('.login-button').toggleClass('d-none');
     $('.logout-button').toggleClass('d-none');
   });
 
   $('.logout-button').on('click', function() {
-    del('/login', (data) => {
+    del('/rest/login', (data) => {
       console.log(data);
-      $('.login-button').toggleClass('d-none');
-      $('.logout-button').toggleClass('d-none');
     });
-  })
+
+    $('.login-button').toggleClass('d-none');
+    $('.logout-button').toggleClass('d-none');
+  });
+
+  let loginEmail = $('#email-login').val();
+  let loginPassword = $('#password-login').val();
+
+  $('#email-login').on('keyup', function() {
+    loginEmail = $('#email-login').val();
+  });
+
+  $('#password-login').on('keyup', function() {
+    loginPassword = $('#password-login').val();
+  });
 
   $('.login-submit').on('click', function() {
-    post('/login', { "email": loginEmail, "password": loginPassword }, (data) => {
-      console.log('login', data);
-      $('.login-button').toggleClass('d-none');
-      $('.logout-button').toggleClass('d-none');
-      $('#login-div').toggleClass('d-none');
-      $('#main-div').toggleClass('d-none');
+
+    post('/rest/login', { "email": loginEmail, "password": loginPassword }, (data) => {
+
+      if (!data.user) {
+        console.log('error: ', data);
+        $('#wrong-login').toggleClass('d-none');
+      } else {
+        console.log('signup callback: ', data);
+        console.log('loginEmail', loginEmail);
+        console.log('loginPassword', loginPassword);
+        $('.login-button').toggleClass('d-none');
+        $('.logout-button').toggleClass('d-none');
+        $('#login-div').toggleClass('d-none');
+        $('#main-div').toggleClass('d-none');
+        $('#email-login').val('');
+        $('#password-login').val('');
+      }
     });
+
+
   });
 }
 
@@ -162,14 +186,35 @@ function register() {
   let signupEmail = $('#email-signup').val();
   let signupPassword = $('#password-signup').val();
 
+  $('#email-signup').on('keyup', function() {
+    signupEmail = $('#email-signup').val();
+  });
+
+  $('#password-signup').on('keyup', function() {
+    signupPassword = $('#password-signup').val();
+  });
+
   $('.signup-submit').on('click', function() {
+
     post('/rest/users', { "email": signupEmail, "password": signupPassword }, (data) => {
-      console.log('signup', data);
-      console.log('emailInput', signupEmail);
-      $('.login-button').toggleClass('d-none');
-      $('.logout-button').toggleClass('d-none');
-      $('#signup-div').toggleClass('d-none');
-      $('#main-div').toggleClass('d-none');
+
+      if (data._error) {
+        console.log('error: ', data._error);
+        $('#email-exists').toggleClass('d-none');
+      }
+
+      else {
+        console.log('signup callback: ', data);
+        console.log('signupEmail', signupEmail);
+        console.log('signupPassword', signupPassword);
+        $('.login-button').toggleClass('d-none');
+        $('.logout-button').toggleClass('d-none');
+        $('#signup-div').toggleClass('d-none');
+        $('#main-div').toggleClass('d-none');
+        $('#email-signup').val('');
+        $('#password-signup').val('');
+      }
+
     });
   });
 }
