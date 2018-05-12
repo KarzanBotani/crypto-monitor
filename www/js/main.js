@@ -90,7 +90,7 @@ function renderAll() {
     dollarValueDiv.text('$' + dollarValue);
     marketCapDiv.text('$' + marketCap);
     availableSupplyDiv.text('$' + availableSupply);
-    percentChangeDiv.text(percentChange + '%');
+    percentChangeDiv.text(percentChange + ' %');
 
     row.append(rankDiv);
     row.append(nameDiv);
